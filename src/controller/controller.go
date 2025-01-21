@@ -25,6 +25,7 @@ func NewController(c *Config) {
 	apiRoutes := c.R.Group("/api")
 	{
 		apiRoutes.GET("/txn", controller.FindAllTransaction)
+		apiRoutes.GET("/txn/:id", controller.FindTransactionById)
 		apiRoutes.POST("/txn/add", controller.AddTransaction)
 		apiRoutes.POST("/txn/edit", controller.EditTransaction)
 		apiRoutes.DELETE("/txn/delete", controller.DeleteTransaction)
@@ -33,6 +34,16 @@ func NewController(c *Config) {
 
 func (c *Controller) FindAllTransaction(ctx *gin.Context) {
 	transactions, err := c.TransactionService.FindAll(ctx.Request.Context())
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	} else {
+		ctx.JSON(http.StatusOK, gin.H{"transactions": transactions})
+	}
+}
+
+func (c *Controller) FindTransactionById(ctx *gin.Context) {
+	transactions, err := c.TransactionService.FindById(ctx.Request.Context(), ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

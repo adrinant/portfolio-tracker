@@ -4,6 +4,7 @@ import (
 	"context"
 	"portfolio-tracker/entity"
 	"portfolio-tracker/repository"
+	"strconv"
 )
 
 type TransactionService interface {
@@ -11,6 +12,7 @@ type TransactionService interface {
 	Edit(ctx context.Context, u entity.Transaction) error
 	Delete(ctx context.Context, id int) error
 	FindAll(ctx context.Context) ([]entity.Transaction, error)
+	FindById(ctx context.Context, id string) (entity.Transaction, error)
 }
 
 type transactionService struct {
@@ -26,6 +28,15 @@ func NewTransactionService(repository repository.TransactionRepository) Transact
 func (s *transactionService) FindAll(ctx context.Context) ([]entity.Transaction, error) {
 	transactions, err := s.repository.FindAll(ctx)
 	return transactions, err
+}
+
+func (s *transactionService) FindById(ctx context.Context, id string) (entity.Transaction, error) {
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return entity.Transaction{}, err
+	}
+	transaction, err := s.repository.FindById(ctx, i)
+	return transaction, err
 }
 
 func (s *transactionService) Add(ctx context.Context, transaction entity.Transaction) error {
