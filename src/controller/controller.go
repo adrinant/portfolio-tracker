@@ -25,9 +25,9 @@ func NewController(c *Config) {
 	apiRoutes := c.R.Group("/api")
 	{
 		apiRoutes.GET("/txn", controller.FindAllTransaction)
-		apiRoutes.GET("/txn/add", controller.AddTransaction)
-		apiRoutes.GET("/txn/edit", controller.EditTransaction)
-		apiRoutes.GET("/txn/delete", controller.DeleteTransaction)
+		apiRoutes.POST("/txn/add", controller.AddTransaction)
+		apiRoutes.POST("/txn/edit", controller.EditTransaction)
+		apiRoutes.DELETE("/txn/delete", controller.DeleteTransaction)
 	}
 }
 
