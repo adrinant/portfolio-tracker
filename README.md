@@ -10,8 +10,8 @@ Before you begin, make sure you have the following installed on your system:
 
 1. **Clone the Repository**
    ```bash
-   git clone <repository-url>
-   cd <repository-name>
+   git clone <https://github.com/adrinant/portfolio-tracker.git>
+   cd <portfolio-tracker>
    ```
 
 2. **Build and Start the Services**
@@ -25,6 +25,7 @@ Before you begin, make sure you have the following installed on your system:
    ```
    http://localhost:<port>
    ```
+   the default port is 5173
 
 ## Notes
 - Make sure Docker is running before executing the commands.
