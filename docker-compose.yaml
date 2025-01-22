@@ -18,7 +18,7 @@ services:
       - "8080"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.goapp.rule=Host(`127.0.0.1`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.goapp.rule=Host(`localhost`) && PathPrefix(`/api`)"
       - "traefik.http.services.goapp.loadbalancer.server.port=8080"
     env_file:
       - .env
@@ -49,5 +49,24 @@ services:
       timeout: 5s
       retries: 5
     command: ["postgres", "-c", "log_statement=none"]
+  vue-client:
+    build: ./src-client
+    image: vue-client
+    expose:
+      - "5173"
+    ports:
+      - "5173:5173"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vue-client.rule=Host('localhost') && PathPrefix('/')"
+      - "traefik.http.services.vue-client.loadbalancer.server.port=5173"
+    volumes:
+      - "./src-client:/app"
+      - "/app/node_modules"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5173"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 volumes:
   pg_data:
