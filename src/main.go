@@ -15,6 +15,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Allow all origins for CORS
+		c.Header("Access-Control-Allow-Origin", "*")
+		// Allow credentials
+		c.Header("Access-Control-Allow-Credentials", "true")
+		// Allow specific headers
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		// Allow specific methods, including DELETE
+		c.Header("Access-Control-Allow-Methods", "POST,HEAD,PATCH,OPTIONS,GET,PUT,DELETE")
+		// Allow the server to vary based on the origin
+		c.Header("Vary", "Origin")
+
+		// Handle preflight requests (OPTIONS)
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204) // No Content
+			return
+		}
+
+		// Continue processing the request
+		c.Next()
+	}
+}
+
 func main() {
 	log.Println("Starting Server ...")
 
@@ -25,6 +49,7 @@ func main() {
 	}
 
 	router := gin.Default()
+	router.Use(CORSMiddleware())
 
 	transactionRepository := repository.NewTransactionRepository(db.DB)
 	transactionService := service.NewTransactionService(transactionRepository)

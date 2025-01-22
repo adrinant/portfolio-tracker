@@ -60,7 +60,7 @@ func (r *pgTransactionRepository) Add(ctx context.Context, u entity.Transaction)
 }
 
 func (r *pgTransactionRepository) Edit(ctx context.Context, u entity.Transaction) error {
-	query := "UPDATE INTO transactions (type, ticker, volume, price, date) VALUES ($1, $2, $3, $4, $5) WHERE id=$6"
+	query := "UPDATE transactions SET (type, ticker, volume, price, date) = ($1, $2, $3, $4, $5) WHERE id=$6"
 
 	if _, err := r.DB.ExecContext(ctx, query, u.Type, u.Ticker, u.Volume, u.Price, u.Date, u.ID); err != nil {
 		return err

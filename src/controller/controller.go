@@ -43,12 +43,12 @@ func (c *Controller) FindAllTransaction(ctx *gin.Context) {
 }
 
 func (c *Controller) FindTransactionById(ctx *gin.Context) {
-	transactions, err := c.TransactionService.FindById(ctx.Request.Context(), ctx.Param("id"))
+	transaction, err := c.TransactionService.FindById(ctx.Request.Context(), ctx.Param("id"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	} else {
-		ctx.JSON(http.StatusOK, gin.H{"transactions": transactions})
+		ctx.JSON(http.StatusOK, gin.H{"transaction": transaction})
 	}
 }
 
